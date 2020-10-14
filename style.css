@@ -1,0 +1,16 @@
+body {
+  background: black;
+}
+
+h1 {
+  color: white;
+  text-align: center;
+}
+
+canvas {
+  outline: none;
+  display: block;
+  border: 3px solid black;
+  text-align: center;
+  margin: auto;
+}
