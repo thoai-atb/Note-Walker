@@ -10,6 +10,8 @@ class MusicBox {
       let notes = [];
       for (var i = 0; i < processSheet.length/2; i++) {
         let c = processSheet.substring(i*2, i*2 + 2);
+        if(c == "==")
+          c = "";
         notes.push(c);
       }
       return notes;

@@ -109,8 +109,10 @@ class Player {
       this.doneMove = true;
       board.activate(this.x, this.y);
     }
-    if(this.traces.length == 0)
+    if(this.doingPreparedMoves && this.doneMove && !this.traces.length){
       this.doingPreparedMoves = false;
+      board.checkRecording();
+    }
   }
 
   display() {

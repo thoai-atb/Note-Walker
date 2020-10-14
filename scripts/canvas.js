@@ -6,6 +6,8 @@ const noteNames = ("C4 c4 D4 d4 E4 F4 f4 G4 g4 A4 a4 B4 " +
                   "C6 c6 D6 d6 E6 F6 f6 G6").split(" ");
 const REPEATING_NOTES = false;
 
+var currentLevel = 0;
+
 function init(){
   // EVENT ASSIGNMENTS
   canvas = document.getElementById('thecanvas');
@@ -14,10 +16,8 @@ function init(){
   canvas.addEventListener("keyup", keyReleased);
   context = canvas.getContext('2d');
 
-  // OBJECTS
-  level1 = "C4-C4-C4";
-  board = new Board(level1, 3);
-  player = new Player();
+  // INITIALIZE LEVEL
+  nextLevel();
 
   // INITIALIZE THE LOOP
   loop();
@@ -25,6 +25,13 @@ function init(){
 
 function cellSize(){
   return canvas.width / board.gridSize();
+}
+
+function nextLevel(){
+  currentLevel ++;
+  var lvl = LEVELS[currentLevel-1];
+  board = new Board(lvl, Math.floor(Math.sqrt(lvl.length)) + 1);
+  player = new Player();
 }
 
 function keyPressed(event){
@@ -44,6 +51,9 @@ function keyPressed(event){
     case "SHIFT":
       player.prepareMoves();
       break;
+    case "F":
+      board.demoSong();
+      break;
     case "P":
       debug();
       break;
@@ -59,6 +69,7 @@ function debug(){
 
 function keyReleased(event){
   if(event.key.toUpperCase() == "SHIFT"){
+    board.startRecording();
     player.doPreparedMoves();
   }
 }

@@ -3,7 +3,7 @@ class Board {
     this.size = size;
     this.activatedColor = "#ffffcc";
     this.normalColor = "#ffa64d";
-
+    this.musicSheet = musicSheet;
     let notes = MusicBox.analyze(musicSheet);
     this.generateMap(notes);
     // this.buildObstacles();
@@ -76,7 +76,10 @@ class Board {
           return false;
         let dest = draft.get(next.x, next.y);
         if(!dest) return true;
-        return REPEATING_NOTES && dest == nextNote;
+        if(REPEATING_NOTES){
+          return dest == nextNote || dest == 'step';
+        }
+        return false;
       };
 
       if(isValid()){
@@ -86,7 +89,7 @@ class Board {
           possibleDirecions : ['u', 'd', 'l', 'r'],
           previousNote : draft.get(next.x, next.y)
         });
-        draft.set(next.x, next.y, nextNote);
+        draft.set(next.x, next.y, nextNote || 'step');
       }
     }
 
@@ -98,9 +101,12 @@ class Board {
     this.startPoint = start;
     this.data = new Array(this.gridSize() * this.gridSize());
     for(let i = 0; i<this.data.length; i++){
+      let s = draft[i];
+      if(!s || s == 'step')
+        s = '';
       this.data[i] = {
         cooldown: 0,
-        note: draft[i] || ''
+        note: s
       }
     }
   }
@@ -113,14 +119,53 @@ class Board {
     }
   }
 
+  demoSong(){
+    let box = new MusicBox(this.musicSheet, 150);
+    box.play();
+  }
+
   getStartPoint(){
     return {x : this.startPoint.x, y : this.startPoint.y};
   }
 
+  startRecording(){
+    this.playerAnswer = [];
+    this.listening = true;
+  }
+
+  checkRecording(){
+    this.listening = false;
+    let notes = MusicBox.analyze(this.musicSheet);
+    let redundantCount = 0;
+    for(let note of this.playerAnswer){
+      if(note && note != '$')
+        break;
+      redundantCount++;
+    }
+    this.playerAnswer.splice(0, redundantCount);
+    if(this.playerAnswer.length < notes.length)
+      return;
+    for(let i = 0; i < notes.length; i++){
+      let ans = this.playerAnswer[i];
+      if(ans == '$')
+        ans = '';
+      if(ans != notes[i])
+        return;
+    }
+    this.winning();
+  }
+
+  winning(){
+    let sound = new Audio('audio/open_door.wav');
+    sound.volume = 0.2;
+    sound.play();
+    nextLevel();
+  }
+
   activate(x, y) {
     let note = this.data[x + y * this.gridSize()].note;
-    if(!note)
-      return;
+    if(this.listening)
+      this.playerAnswer.push(note);
     if(MusicBox.play(note))
       this.data[x + y*this.gridSize()].cooldown = 1;
   }
