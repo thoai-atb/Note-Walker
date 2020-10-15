@@ -1,5 +1,16 @@
 class MusicBox {
 
+  static noteAudio = new Map();
+
+  static initAudio() {
+    canvas.noteNames.array.forEach(note => {
+      let filename = "";
+      if (note.charAt(0) != note.charAt(0).toUpperCase())
+        filename = note.charAt(0).toUpperCase() + "s" + note.charAt(1);  
+      this.noteAudio.set(note, new Audio("audio/" + filename + ".wav"));
+    });
+  }
+
   constructor(musicSheet, speed){
     this.musicSheet = musicSheet;
     this.speed = speed;
@@ -20,10 +31,7 @@ class MusicBox {
   static play(note){
     if(!noteNames.includes(note))
       return false;
-    if(note.charAt(0) != note.charAt(0).toUpperCase())
-      note = note.charAt(0).toUpperCase() + "s" + note.charAt(1);
-    let sound = new Audio("audio/" + note + ".wav");
-    sound.play();
+    this.noteAudio.get(note).play();
     return true;
   }
 
