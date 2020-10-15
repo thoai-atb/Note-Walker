@@ -7,6 +7,7 @@ const noteNames = ("C4 c4 D4 d4 E4 F4 f4 G4 g4 A4 a4 B4 " +
 const REPEATING_NOTES = false;
 
 var currentLevel = 0;
+var currentStage = -1;
 
 function init(){
   // EVENT ASSIGNMENTS
@@ -27,11 +28,31 @@ function cellSize(){
   return canvas.width / board.gridSize();
 }
 
+function setLevel(level, stage){
+  currentLevel = level - 1;
+  currentStage = stage - 1;
+  buildLevel();
+}
+
 function nextLevel(){
-  currentLevel ++;
-  var lvl = LEVELS[currentLevel-1];
-  board = new Board(lvl, Math.floor(Math.sqrt(lvl.length)) + 1);
+  currentStage ++;
+  var lvl = LEVELS[currentLevel];
+  if(lvl.sheets.length == currentStage){
+    currentStage = 0;
+    currentLevel ++;
+  }
+  buildLevel();
+}
+
+function buildLevel(){
+  let lvl = LEVELS[currentLevel];
+  let sheet = lvl.sheets[currentStage];
+
+  board = new Board(sheet, Math.floor(Math.sqrt(sheet.length)) + 1, lvl.color);
   player = new Player();
+  let label = document.getElementById('levelstage');
+  label.style.color = lvl.color;
+  label.innerHTML = "LEVEL " + (currentLevel + 1) + " - " + (currentStage + 1) + "/" + lvl.sheets.length;
 }
 
 function keyPressed(event){

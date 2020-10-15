@@ -1,8 +1,8 @@
 class Board {
-  constructor(musicSheet, size) {
+  constructor(musicSheet, size, color) {
     this.size = size;
-    this.activatedColor = "#ffffcc";
-    this.normalColor = "#ffa64d";
+    this.activatedColor = "#ffffff";
+    this.normalColor = color;
     this.musicSheet = musicSheet;
     let notes = MusicBox.analyze(musicSheet);
     this.generateMap(notes);
@@ -198,7 +198,7 @@ class Board {
 
         x = i * u + u/2;
         y = j * u + u/2;
-        context.fillStyle = "rgb(120, 80, 27)"
+        context.fillStyle = "rgb(0, 0, 0, 0.6)"
         context.strokeStyle = "black";
         context.font = u / 3 + "px Arial";
         context.textAlign = "center";
