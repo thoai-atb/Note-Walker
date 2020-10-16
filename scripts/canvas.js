@@ -17,6 +17,9 @@ function init(){
   canvas.addEventListener("keyup", keyReleased);
   context = canvas.getContext('2d');
 
+  // INITIALIZE AUDIO
+  MusicBox.initAudio();
+
   // INITIALIZE LEVEL
   nextLevel();
 
