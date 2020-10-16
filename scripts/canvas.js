@@ -19,6 +19,7 @@ function init(){
 
   // INITIALIZE AUDIO
   MusicBox.initAudio();
+  dooreffect = new Audio('audio/open_door.wav');
 
   // INITIALIZE LEVEL
   nextLevel();

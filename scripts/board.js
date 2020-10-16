@@ -120,8 +120,7 @@ class Board {
   }
 
   demoSong(){
-    let box = new MusicBox(this.musicSheet, 150);
-    box.play();
+    MusicBox.playSheet(this.musicSheet, 150);
   }
 
   getStartPoint(){
@@ -156,9 +155,9 @@ class Board {
   }
 
   winning(){
-    let sound = new Audio('audio/open_door.wav');
-    sound.volume = 0.2;
-    sound.play();
+    dooreffect.pause();
+    dooreffect.volume = 0.2;
+    dooreffect.play();
     nextLevel();
   }
 

@@ -6,7 +6,7 @@ class MusicBox {
     for (const note of noteNames) {
       let filename = note;
       if (note.charAt(0) != note.charAt(0).toUpperCase())
-        filename = note.charAt(0).toUpperCase() + "s" + note.charAt(1);  
+        filename = note.charAt(0).toUpperCase() + "s" + note.charAt(1);
       this.noteAudio.set(note, new Audio("audio/" + filename + ".wav"));
     }
   }
@@ -15,11 +15,6 @@ class MusicBox {
     for (const aud of this.noteAudio) {
       console.log(aud);
     }
-  }
-
-  constructor(musicSheet, speed){
-    this.musicSheet = musicSheet;
-    this.speed = speed;
   }
 
   static analyze(sheet){
@@ -55,11 +50,11 @@ class MusicBox {
     return [text, note.charAt(1)];
   }
 
-  play(){
-    let processSheet = this.musicSheet.replaceAll("-", "  ");
+  static playSheet(musicSheet, speed){
+    let processSheet = musicSheet.replaceAll("-", "  ");
     for (var i = 0; i < processSheet.length/2; i++) {
       let c = processSheet.substring(i*2, i*2 + 2);
-      setTimeout(() => MusicBox.play(c), this.speed * i);
+      setTimeout(() => MusicBox.play(c), speed * i);
     }
   }
 
