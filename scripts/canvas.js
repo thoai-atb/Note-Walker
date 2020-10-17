@@ -6,8 +6,8 @@ const noteNames = ("C4 c4 D4 d4 E4 F4 f4 G4 g4 A4 a4 B4 " +
                   "C6 c6 D6 d6 E6 F6 f6 G6").split(" ");
 const REPEATING_NOTES = false;
 
-var currentLevel = 0;
-var currentStage = -1;
+var board, game, player;
+
 
 function init(){
   // EVENT ASSIGNMENTS
@@ -17,13 +17,8 @@ function init(){
   canvas.addEventListener("keyup", keyReleased);
   context = canvas.getContext('2d');
 
-  // INITIALIZE AUDIO
-  MusicBox.initAudio();
-  dooreffect = new Audio('audio/open_door.wav');
-  dooreffect.load();
-
-  // INITIALIZE LEVEL
-  nextLevel();
+  // INITIALIZE GAME STATE
+  game = new GameLoading();
 
   // INITIALIZE THE LOOP
   loop();
@@ -31,33 +26,6 @@ function init(){
 
 function cellSize(){
   return canvas.width / board.gridSize();
-}
-
-function setLevel(level, stage){
-  currentLevel = level - 1;
-  currentStage = stage - 1;
-  buildLevel();
-}
-
-function nextLevel(){
-  currentStage ++;
-  var lvl = LEVELS[currentLevel];
-  if(lvl.sheets.length == currentStage){
-    currentStage = 0;
-    currentLevel ++;
-  }
-  buildLevel();
-}
-
-function buildLevel(){
-  let lvl = LEVELS[currentLevel];
-  let sheet = lvl.sheets[currentStage];
-
-  board = new Board(sheet, Math.floor(Math.sqrt(sheet.length)) + 1, lvl.color);
-  player = new Player();
-  let label = document.getElementById('levelstage');
-  label.style.color = lvl.color;
-  label.innerHTML = "LEVEL " + (currentLevel + 1) + " - " + (currentStage + 1) + "/" + lvl.sheets.length;
 }
 
 function keyPressed(event){
@@ -101,15 +69,16 @@ function keyReleased(event){
 }
 
 function loop(){
-  board.update();
-  player.update();
-
-  displayBackground();
-  board.display();
-  player.display();
+  game.update();
+  game.display();
   window.requestAnimationFrame(loop);
 }
 
-function displayBackground(){
+function fillBackground(color){
+  context.fillStyle = color;
+  context.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+function clearBackground(){
   context.clearRect(0, 0, canvas.width, canvas.height);
 }

@@ -2,6 +2,8 @@ CanvasRenderingContext2D.prototype.roundedRectangle = function(x, y, width, heig
   const radiansInCircle = 2 * Math.PI
   const halfRadians = (2 * Math.PI)/2
   const quarterRadians = (2 * Math.PI)/4
+  x -= width/2
+  y -= height/2
 
   // top left arc
   this.arc(rounded + x, rounded + y, rounded, -quarterRadians, halfRadians, true)

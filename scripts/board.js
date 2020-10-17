@@ -155,10 +155,8 @@ class Board {
   }
 
   winning(){
-    dooreffect.pause();
-    dooreffect.volume = 0.2;
-    dooreffect.play();
-    nextLevel();
+    MusicBox.playWinSound();
+    game.nextLevel();
   }
 
   activate(x, y) {
@@ -188,8 +186,8 @@ class Board {
         let u = cellSize();
         let p = 0.9; // ratio padding
         let r = u * 0.1; // round corner
-        let x = i * u + (1 - p) * u / 2;
-        let y = j * u + (1 - p) * u / 2;
+        let x = i * u + u / 2;
+        let y = j * u + u / 2
         context.beginPath();
         context.roundedRectangle(x , y, u * p, u * p, r);
         context.fill();

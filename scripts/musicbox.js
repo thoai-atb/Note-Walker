@@ -1,6 +1,9 @@
 class MusicBox {
 
   static noteAudio = new Map();
+  static loadedNoteCount = 0;
+  static allNotesLoaded = false;
+  static doorEffect;
 
   static initAudio() {
     for (const note of noteNames) {
@@ -8,15 +11,35 @@ class MusicBox {
       if (note.charAt(0) != note.charAt(0).toUpperCase())
         filename = note.charAt(0).toUpperCase() + "s" + note.charAt(1);
       let audio = new Audio("audio/" + filename + ".wav");
+      audio.note = note;
       audio.load();
+      audio.addEventListener('canplaythrough', (e) => {MusicBox.noteLoaded(e);});
       this.noteAudio.set(note, audio);
     }
+    this.doorEffect = new Audio('audio/open_door.wav');
+    this.doorEffect.load();
+  }
+
+  static loadingPercentage(){
+    let total = this.noteAudio.size + 1;
+    let loaded = this.loadedNoteCount + (this.doorEffect.readyState==4? 1 : 0);
+    return loaded * 100 / total;
+  }
+
+  static allSoundLoaded(){
+    return this.doorEffect.readyState == 4 && this.allNotesLoaded;
   }
 
   static debugAudio() {
     for (const aud of this.noteAudio) {
       console.log(aud);
     }
+  }
+
+  static noteLoaded(event){
+    this.loadedNoteCount ++;
+    if(this.loadedNoteCount == noteNames.length)
+      this.allNotesLoaded = true;
   }
 
   static analyze(sheet){
@@ -58,6 +81,12 @@ class MusicBox {
       let c = processSheet.substring(i*2, i*2 + 2);
       setTimeout(() => MusicBox.play(c), speed * i);
     }
+  }
+
+  static playWinSound(){
+    this.doorEffect.pause();
+    this.doorEffect.volume = 0.2;
+    this.doorEffect.play();
   }
 
 }
