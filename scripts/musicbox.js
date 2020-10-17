@@ -7,7 +7,9 @@ class MusicBox {
       let filename = note;
       if (note.charAt(0) != note.charAt(0).toUpperCase())
         filename = note.charAt(0).toUpperCase() + "s" + note.charAt(1);
-      this.noteAudio.set(note, new Audio("audio/" + filename + ".wav"));
+      let audio = new Audio("audio/" + filename + ".wav");
+      audio.load();
+      this.noteAudio.set(note, audio);
     }
   }
 
