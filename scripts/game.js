@@ -1,24 +1,26 @@
 class GameLoading {
 
-  constructor(){
-    MusicBox.initAudio();
+  constructor(gamePlaying){
+    this.gamePlaying = gamePlaying;
+    MusicBox.release();
+    MusicBox.initAudio(gamePlaying.getSheet());
   }
 
   update(){
     if(!MusicBox.allSoundLoaded())
       return;
-    game = new GamePlaying();
+    game = this.gamePlaying;
   }
 
   display(){
-    clearBackground();
-    context.strokeStyle = "white";
+    // this.gamePlaying.display();
+    context.strokeStyle = "rgba(255, 255, 255, 0.4)";
     context.lineWidth = 20;
-    context.beginPath();
-    context.roundedRectangle(canvas.width/2, canvas.height/2, canvas.width * 0.75, canvas.height * 0.75, 20);
-    context.stroke();
-    context.fillStyle = "white"
-    context.font = canvas.width / 10 + "px Arial";
+    // context.beginPath();
+    // context.roundedRectangle(canvas.width/2, canvas.height/2, canvas.width * 0.75, canvas.height * 0.75, 20);
+    // context.stroke();
+    context.fillStyle = "rgba(255, 255, 255, 0.4)"
+    context.font = canvas.width / 10 + "px Trebuchet MS";
     context.textAlign = "center";
     context.textBaseline = "middle";
     context.fillText(Math.floor(MusicBox.loadingPercentage()) + "%", canvas.width/2, canvas.height/2);
@@ -40,9 +42,12 @@ class GamePlaying {
   }
 
   display(){
-    clearBackground();
     board.display();
     player.display();
+  }
+
+  getSheet(){
+    return LEVELS[this.currentLevel].sheets[this.currentStage];
   }
 
   setLevel(level, stage){
@@ -70,5 +75,6 @@ class GamePlaying {
     let label = document.getElementById('levelstage');
     label.style.color = lvl.color;
     label.innerHTML = "LEVEL " + (this.currentLevel + 1) + " - " + (this.currentStage + 1) + "/" + lvl.sheets.length;
+    game = new GameLoading(this);
   }
 }

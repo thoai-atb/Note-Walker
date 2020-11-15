@@ -18,7 +18,7 @@ function init(){
   context = canvas.getContext('2d');
 
   // INITIALIZE GAME STATE
-  game = new GameLoading();
+  game = new GameLoading(new GamePlaying());
 
   // INITIALIZE THE LOOP
   loop();
@@ -70,6 +70,7 @@ function keyReleased(event){
 
 function loop(){
   game.update();
+  clearBackground();
   game.display();
   window.requestAnimationFrame(loop);
 }
